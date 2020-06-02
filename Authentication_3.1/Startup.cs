@@ -38,6 +38,7 @@ namespace Authentication_3._1
             services.Configure<IdentityOptions>(options => 
             {
                 // password settings
+
                 options.Password.RequiredLength = 8;
                 options.Password.RequireDigit = true;
                 options.Password.RequireUppercase = true;
