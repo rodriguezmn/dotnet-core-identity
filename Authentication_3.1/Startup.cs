@@ -12,6 +12,7 @@ using Authentication_3._1.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.CodeAnalysis.Options;
 
 namespace Authentication_3._1
 {
@@ -32,6 +33,27 @@ namespace Authentication_3._1
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            // identity options configuration
+            services.Configure<IdentityOptions>(options => 
+            {
+                // password settings
+                options.Password.RequiredLength = 8;
+                options.Password.RequireDigit = true;
+                options.Password.RequireUppercase = true;
+
+                // lockout settings
+
+                options.Lockout.MaxFailedAccessAttempts = 5; // 5 attemps before lockout
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10); // user is lockedout for 10 minutes
+
+                // user settings 
+
+                options.User.RequireUniqueEmail = true; // all users need to have unique emails
+
+            
+            });
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
